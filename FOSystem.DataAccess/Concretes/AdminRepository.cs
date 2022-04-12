@@ -76,6 +76,10 @@ namespace FOSystem.DataAccess.Concretes
 
                 using (var dbConnection = new SqlConnection(connectionString))
                 {
+                    if (dbConnection.State != ConnectionState.Open)
+                    {
+                        dbConnection.Open();
+                    }
                     using (var cmd = new SqlCommand(commandText))
                     {
                         cmd.Connection = dbConnection;
@@ -84,10 +88,7 @@ namespace FOSystem.DataAccess.Concretes
                         DbHelper.addParameter(cmd, "@ProductYukseklik", entity.ProductYukselik, DbType.Double, ParameterDirection.Input);
                         DbHelper.addParameter(cmd, "@ProductAdedi", entity.ProductAdedi, DbType.Int32, ParameterDirection.Input);
                         DbHelper.addParameter(cmd, "@ProductAdi", entity.ProductAdi, DbType.String, ParameterDirection.Input);
-                        if(dbConnection.State != ConnectionState.Open)
-                        {
-                            dbConnection.Open();
-                        }
+                        
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -128,6 +129,7 @@ namespace FOSystem.DataAccess.Concretes
                                     Product product = new Product();
                                     product.ProductAdi = reader.GetString(6);
                                     productList.Add(product);
+                                    cmd.ExecuteNonQuery();
                                 }
                             }
                         }
@@ -141,10 +143,32 @@ namespace FOSystem.DataAccess.Concretes
                 throw ex; 
             }
         }
-
-        public Product SiparisOlustur(int id)
+        public Orders SiparisOlustur(Orders order)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query =new StringBuilder();
+                query.Append("Insert into Orders ([UserId],[ProductId],[OrderAdedi]) values (@UserId,@ProductId,@OrderAdedi)");
+                string cmdText = query.ToString();
+
+                using (var dbConnection = new SqlConnection(connectionString))
+                {
+                    using (var commandText = new SqlCommand(cmdText))
+                    {
+                        commandText.Connection = dbConnection;
+
+                        DbHelper.addParameter(commandText, "@UserId",order.UserId,DbType.Int32,ParameterDirection.Input);
+                        DbHelper.addParameter(commandText, "@ProductId", order.ProductId, DbType.Int32, ParameterDirection.Input);
+                        DbHelper.addParameter(commandText, "@OrderAdedi", order.OrderAdedi,DbType.Int32,ParameterDirection.Input);
+                    }
+                }
+                return order;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }
