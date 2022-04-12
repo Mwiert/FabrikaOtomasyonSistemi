@@ -10,9 +10,6 @@ namespace FOSystem.DataAccess.Abstractions
     {
         Type insert(Type entity);
         IList<Type> selectAll();
-        Type selectyByID(int id);
-        Type update(int id, Type updated);
-        void delete(int id);
         Type SiparisOlustur(int id);
     }
 }

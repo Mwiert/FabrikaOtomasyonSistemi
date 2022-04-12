@@ -9,6 +9,7 @@ namespace FOSystem.Models.Concretes
     public class Product
     {
         public int ProductId { get; set; }
+        public string ProductAdi { get; set; }
         public double ProductEn { get; set; }
         public double ProductBoy { get; set; }
         public double ProductYukselik { get; set; }

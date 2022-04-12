@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FOSystem.Business.Concretes
 {
-    internal class AdminBusiness
+    public class AdminBusiness
     {
     }
 }
